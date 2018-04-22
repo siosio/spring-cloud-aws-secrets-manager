@@ -1,4 +1,4 @@
-package com.github.siosoi
+package com.github.siosio
 
 import com.amazonaws.auth.*
 import com.amazonaws.services.secretsmanager.*

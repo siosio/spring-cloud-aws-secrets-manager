@@ -1,1 +1,1 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.github.siosoi.AwsSecretsManagerEnvironmentPostProcessor
+org.springframework.boot.env.EnvironmentPostProcessor=com.github.siosio.AwsSecretsManagerEnvironmentPostProcessor
