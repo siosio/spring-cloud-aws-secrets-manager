@@ -6,17 +6,13 @@ import com.amazonaws.services.secretsmanager.model.*
 import com.fasterxml.jackson.databind.*
 import org.springframework.boot.*
 import org.springframework.boot.env.*
-import org.springframework.core.*
 import org.springframework.core.env.*
 
-class AwsSecretsManagerEnvironmentPostProcessor : EnvironmentPostProcessor, Ordered {
+class AwsSecretsManagerEnvironmentPostProcessor : EnvironmentPostProcessor {
 
     companion object {
-        private val ORDER = SystemEnvironmentPropertySourceEnvironmentPostProcessor.DEFAULT_ORDER - 1
         private val objectMapper = ObjectMapper()
     }
-
-    override fun getOrder(): Int = ORDER
 
     override fun postProcessEnvironment(environment: ConfigurableEnvironment, application: SpringApplication) {
 
