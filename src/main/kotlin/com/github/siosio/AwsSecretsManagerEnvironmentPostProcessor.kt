@@ -16,6 +16,10 @@ class AwsSecretsManagerEnvironmentPostProcessor : EnvironmentPostProcessor {
 
     override fun postProcessEnvironment(environment: ConfigurableEnvironment, application: SpringApplication) {
 
+        if (environment.getProperty("aws.secretsmanager.enabled", Boolean::class.java, true).not()) {
+            return
+        }
+        
         val accessKey = environment.get("cloud.aws.credentials.accessKey")
         val secretKey = environment.get("cloud.aws.credentials.secretKey")
         val region = environment.get("cloud.aws.region.static")
