@@ -19,11 +19,12 @@ repositories {
   mavenCentral()
 }
 
+
 dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  compile 'com.amazonaws:aws-java-sdk-secretsmanager:1.11.319'
 
-  compile 'org.springframework.boot:spring-boot:2.0.1.RELEASE'
-  compile 'com.amazonaws:aws-java-sdk-secretsmanager:1.11.315'
+  compileOnly 'org.springframework.boot:spring-boot:2.0.1.RELEASE'
   
   testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.1.RELEASE'
 }
