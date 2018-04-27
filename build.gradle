@@ -13,6 +13,7 @@ group 'com.github.siosio'
 version '1.0.0'
 
 apply plugin: 'kotlin'
+apply plugin: 'maven'
 
 repositories {
   mavenCentral()
