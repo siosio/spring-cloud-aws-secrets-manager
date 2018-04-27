@@ -20,12 +20,9 @@ class AwsSecretsManagerEnvironmentPostProcessor : EnvironmentPostProcessor {
             return
         }
         
-        val accessKey = environment.get("cloud.aws.credentials.accessKey")
-        val secretKey = environment.get("cloud.aws.credentials.secretKey")
-        val region = environment.get("cloud.aws.region.static")
+        val region = environment.getProperty("cloud.aws.region.static")
 
         val client = AWSSecretsManagerClientBuilder.standard()
-                .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey)))
                 .withRegion(region)
                 .build()
 
