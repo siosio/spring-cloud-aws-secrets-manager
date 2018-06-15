@@ -1,8 +1,12 @@
-group 'com.github.siosio'
-version '1.0.0'
-
+plugins {
+  id "com.jfrog.bintray" version "1.8.1"
+}
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+group groupId
+version version
 
 repositories {
   mavenCentral()
@@ -11,7 +15,6 @@ repositories {
 ext {
   springBootVersion = '2.0.2.RELEASE'
 }
-
 
 dependencies {
   compile 'com.amazonaws:aws-java-sdk-secretsmanager:1.11.319'
@@ -24,3 +27,69 @@ dependencies {
 task wrapper(type: Wrapper) {
   gradleVersion = '4.8'
 }
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allSource
+  classifier = 'sources'
+}
+
+artifacts {
+  archives jar
+  archives sourceJar
+}
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  publications = ['MyPublication']
+  pkg {
+    repo = 'maven'
+    name = 'spring-cloud-aws-secrets-manager'
+    userOrg = 'siosio'
+    licenses = ['MIT']
+    labels = ['Spring', 'AWS Seacrets Manager']
+    vcsUrl = 'https://github.com/siosio/spring-cloud-aws-secrets-manager.git'
+  }
+}
+
+// Create the pom configuration:
+def pomConfig = {
+  licenses {
+    license {
+      name "MIT"
+      url "https://raw.githubusercontent.com/siosio/spring-cloud-aws-secrets-manager/master/LICENSE"
+    }
+  }
+  developers {
+    developer {
+      id "siosio"
+      name "siosio"
+      email "siosio12@gmail.com"
+    }
+  }
+
+  scm {
+    url "git@github.com:spring-cloud/spring-cloud-aws.git"
+  }
+}
+
+// Create the publication with the pom configuration:
+publishing {
+  publications {
+    MyPublication(MavenPublication) {
+      from components.java
+      groupId groupId
+      artifactId projectName
+      artifact sourceJar
+      version version
+      pom.withXml {
+        def root = asNode()
+        root.appendNode('description', 'property values can be injected directly into your beans from aws secrets manager.')
+        root.appendNode('name', 'siosio')
+        root.appendNode('url', 'https://github.com/siosio/spring-cloud-aws-secrets-manager')
+        root.children().last() + pomConfig
+      }
+    }
+  }
+}
+
