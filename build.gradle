@@ -1,6 +1,7 @@
 plugins {
   id "com.jfrog.bintray" version "1.8.1"
 }
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
@@ -13,19 +14,29 @@ repositories {
 }
 
 ext {
-  springBootVersion = '2.0.2.RELEASE'
+  springBootVersion = '2.0.3.RELEASE'
+}
+
+sourceSets {
+  test.compileClasspath += configurations.compileOnly
+  test.runtimeClasspath += configurations.compileOnly
 }
 
 dependencies {
-  compile 'com.amazonaws:aws-java-sdk-secretsmanager:1.11.319'
+  compile 'com.amazonaws:aws-java-sdk-secretsmanager:1.11.344'
+  
+  compile 'org.springframework.cloud:spring-cloud-context:2.0.0.RELEASE'
 
   compileOnly "org.springframework.boot:spring-boot:$springBootVersion"
+  compileOnly "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
   
   testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+
+  annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
 }
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '4.8'
+wrapper {
+  gradleVersion = '4.9'
 }
 
 task sourceJar(type: Jar) {
@@ -44,7 +55,7 @@ bintray {
   publications = ['MyPublication']
   pkg {
     repo = 'maven'
-    name = 'spring-cloud-aws-secrets-manager'
+    name = projectName
     userOrg = 'siosio'
     licenses = ['MIT']
     labels = ['Spring', 'AWS Seacrets Manager']

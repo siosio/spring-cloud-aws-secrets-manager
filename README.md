@@ -15,3 +15,10 @@ dependencies {
 
 ### images
 ![](images/image.png)
+
+### disabling
+please add the following to `resources/bootstrap.properties`.
+
+```properties
+aws.secretsmanager.enabled=false
+```
