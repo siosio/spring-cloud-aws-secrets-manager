@@ -2,6 +2,7 @@ package com.github.siosio;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
@@ -29,19 +30,28 @@ public class AwsSecretsManagerPropertySourceLocator implements PropertySourceLoc
         client.listSecrets(new ListSecretsRequest())
               .getSecretList()
               .forEach(entry -> {
-                  final String name = entry.getName();
-                  final GetSecretValueResult result = client.getSecretValue(new GetSecretValueRequest().withSecretId(name));
-                  propertySource.addPropertySource(new MapPropertySource(name, jsonToMap(result.getSecretString())));
+                  final String secretName = entry.getName();
+                  final GetSecretValueResult result = client.getSecretValue(
+                          new GetSecretValueRequest().withSecretId(secretName));
+                  propertySource.addPropertySource(
+                          new MapPropertySource(secretName, jsonToMap(secretName, result.getSecretString())));
               });
         return propertySource;
     }
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private Map<String, Object> jsonToMap(String jsonString) {
+    private Map<String, Object> jsonToMap(final String name, String jsonString) {
         try {
             //noinspection unchecked
-            return OBJECT_MAPPER.readValue(jsonString, Map.class);
+            final Map<String, Object> map = OBJECT_MAPPER.readValue(jsonString, Map.class);
+            return map.entrySet()
+               .stream()
+               .collect(
+                       Collectors.toMap(
+                               e -> name + '.' + e.getKey(),
+                               Map.Entry::getValue
+                       ));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

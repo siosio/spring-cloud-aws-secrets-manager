@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = IntegrationTest.Comp.class)
-@Ignore
 public class IntegrationTest {
     
     @Autowired
@@ -32,7 +31,7 @@ public class IntegrationTest {
     @SpringBootApplication
     @Component
     public static class Comp {
-        @Value("${test.id}")
+        @Value("${prod/test-data.test.id}")
         public String testValue;
     }
 
