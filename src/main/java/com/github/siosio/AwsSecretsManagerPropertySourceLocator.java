@@ -2,6 +2,7 @@ package com.github.siosio;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
@@ -49,8 +50,8 @@ public class AwsSecretsManagerPropertySourceLocator implements PropertySourceLoc
                .stream()
                .collect(
                        Collectors.toMap(
-                               e -> name + '.' + e.getKey(),
-                               Map.Entry::getValue
+                               e -> name.replaceAll("/", ".") + '.' + e.getKey(),
+                               Entry::getValue
                        ));
         } catch (IOException e) {
             throw new RuntimeException(e);
