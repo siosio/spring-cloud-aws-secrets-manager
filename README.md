@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.siosio:spring-cloud-aws-secrets-manager:1.0.0'
+  compile 'com.github.siosio:spring-cloud-aws-secrets-manager:2.0.0'
 }
 ```
 
